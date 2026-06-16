@@ -81,3 +81,4 @@ order by first_name;
 -- like 'q%' '%q'   '%q%'
 -- like 'w%s'
 
+select * from production
