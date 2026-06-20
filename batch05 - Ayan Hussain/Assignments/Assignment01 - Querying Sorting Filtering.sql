@@ -5,7 +5,7 @@
 --             DISTINCT, AND / OR
 -- ============================================================
 
-
+use BikeStores1;
 -- ============================================================
 --  Question 1 — SELECT & WHERE
 --  Retrieve the first name, last name, city, and phone number
@@ -14,9 +14,8 @@
 -- ============================================================
 
 -- Write your query below:
-
-
-
+select first_name, last_name, city , phone
+from sales.customers where state = 'CA' and phone is not null;
 
 -- ============================================================
 --  Question 2 — ORDER BY (Multiple Columns)
@@ -28,7 +27,8 @@
 
 -- Write your query below:
 
-
+select product_id, product_name, model_year, list_price from production.products
+order by model_year desc , list_price asc;
 
 
 -- ============================================================
@@ -41,10 +41,10 @@
 -- ============================================================
 
 -- Part a:
-
+select top 5 product_name, list_price from production.products
 
 -- Part b:
-
+select top 5 percent product_name, list_price from production.products
 
 
 
@@ -59,36 +59,39 @@
 -- ============================================================
 
 -- Page 1:
-
+select product_id, product_name, list_price from production.products
+order by list_price desc
+offset 0 rows fetch next 10 rows only;
 
 -- Page 2:
-
+select product_id, product_name, list_price from production.products
+order by list_price desc
+offset 10 rows fetch next 20 rows only;
 
 -- Page 3:
-
-
-
+select product_id, product_name, list_price from production.products
+order by list_price desc
+offset 20 rows fetch next 30 rows only;
 
 -- ============================================================
 --  Question 5 — DISTINCT
 --  a) List all unique states in which BikeStores has customers.
 --     Sort the result alphabetically.
+
+select distinct state from sales.customers
+order by state;
+
 --  b) List every unique combination of state and city,
 --     sorted by state then city (both ascending).
+
+select state, city from sales.customers
+order by state , city;
+
 --  c) How many unique model years exist in the products table?
 --     (Retrieve the distinct values; count them manually or
 --     use COUNT — your choice.)
--- ============================================================
 
--- Part a:
-
-
--- Part b:
-
-
--- Part c:
-
-
+select distinct model_year from production.products 
 
 
 -- ============================================================
@@ -103,3 +106,7 @@
 -- ============================================================
 
 -- Write your query below:
+select product_name, brand_id, category_id, list_price from production.products
+where list_price between 500 and 1500
+and model_year in (2019, 2020)
+order by list_price asc;

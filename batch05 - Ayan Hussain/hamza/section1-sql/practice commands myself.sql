@@ -175,20 +175,63 @@ HAVING SUM(salary) > 200000;
 
 
 ---- GROUP BY ROLLUP ----
-SELECT department, COUNT(emp_id) as count FROM employee
-GROUP BY ROLLUP(department);
 
-SELECT department, SUM(salary) as count FROM employee
-GROUP BY ROLLUP(department);
+select department, COUNT(emp_id) as count from employee 
+group by rollup(department);
 
-SELECT department, COALESCE(city,'Total') as city, COUNT(emp_id)
-FROM employee GROUP BY ROLLUP(department, city)
-ORDER BY department;
+select department, sum(salary) as total_salary from employee 
+group by rollup(department);
+
+select department, coalesce(city, 'total') as city, count(emp_id) as count from employee 
+group by rollup(department, city)
+order by department;
 
 
-SELECT department, COALESCE(city,'Total') as city, COUNT(emp_id)
-FROM employee GROUP BY department, city;
+--- SUB QUERIES ---
+--- Single Row ----
+SELECT * FROM employee
+WHERE salary > (SELECT AVG(salary) FROM employee);
 
-SELECT department, COALESCE(city,'Total') as city, COUNT(emp_id)
-FROM employee GROUP BY department, city;
+--- Multi Row ---
+SELECT * FROM employee
+WHERE department IN (
+SELECT department FROM employee WHERE city='Mumbai'
+);
+
+select fname, lname, department from employee
+where department in (select department from employee where city = 'Mumbai');
+
+--- Correlated ----
+SELECT DISTINCT department FROM employee
+SELECT MAX(salary) FROM employee WHERE department = 'Tech'
+SELECT * FROM employee WHERE salary = 120000;
+
+
+select * from employee e1
+where salary =  (
+	select max(salary) from employee e2
+	where e1.department = e2.department
+);
+
+select * from employee 
+where salary in (
+	select max(salary) from employee group by department
+);
+
+--- INLINE VIEW ----
+
+select department, avg
+from(
+	select department, avg(salary) as avg
+	from employee group by department
+) as dept_avg
+where avg > 92000.00;
+
+-- same thing by having
+select department, avg(salary) as avg
+from employee 
+group by department
+having avg(salary) > 92000.00;
+
+
 
