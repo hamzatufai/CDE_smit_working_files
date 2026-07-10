@@ -15,7 +15,8 @@
 
 -- Write your query below:
 
-
+SELECT first_name, last_name, city, phone FROM sales.customers
+WHERE state = 'CA' AND phone IS NOT NULL;
 
 
 -- ============================================================
@@ -28,7 +29,8 @@
 
 -- Write your query below:
 
-
+SELECT product_id, product_name, model_year, list_price FROM production.products
+ORDER BY model_year DESC, list_price ASC;
 
 
 -- ============================================================
@@ -42,10 +44,13 @@
 
 -- Part a:
 
+SELECT TOP 5 product_name,list_price FROM production.products
+ORDER BY list_price DESC;
 
 -- Part b:
 
-
+SELECT TOP 5 PERCENT * FROM production.products
+ORDER BY list_price ASC;
 
 
 -- ============================================================
@@ -59,15 +64,24 @@
 -- ============================================================
 
 -- Page 1:
-
+SELECT * FROM production.products
+ORDER BY list_price DESC
+OFFSET 0 ROWS
+FETCH NEXT 10 ROWS ONLY;
 
 -- Page 2:
-
+SELECT * FROM production.products
+ORDER BY list_price DESC
+OFFSET 11 ROWS
+FETCH NEXT 10 ROWS ONLY;
 
 -- Page 3:
 
 
-
+SELECT * FROM production.products
+ORDER BY list_price DESC
+OFFSET 21 ROWS
+FETCH NEXT 10 ROWS ONLY;
 
 -- ============================================================
 --  Question 5 — DISTINCT
@@ -82,14 +96,19 @@
 
 -- Part a:
 
+SELECT DISTINCT state FROM sales.customers
+WHERE customer_id IS NOT NULL;
 
 -- Part b:
 
+SELECT DISTINCT state, city FROM sales.customers
+ORDER BY state ASC, city ASC;
 
 -- Part c:
 
 
-
+SELECT DISTINCT model_year, COUNT(model_year) AS count_year FROM production.products
+GROUP BY model_year;
 
 -- ============================================================
 --  Question 6 — Logical Operators (AND / OR)
@@ -103,3 +122,7 @@
 -- ============================================================
 
 -- Write your query below:
+
+SELECT product_id, product_name, brand_id, category_id, list_price, model_year FROM production.products
+WHERE (list_price BETWEEN 500 AND 1500) AND (model_year = 2018 OR model_year = 2019)
+ORDER BY list_price ASC;
